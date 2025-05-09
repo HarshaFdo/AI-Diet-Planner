@@ -1,17 +1,46 @@
 import { View, Text, Image, Pressable, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Input from "../../components/shared/Input";
 import Button from "../../components/shared/Button";
 import { Link } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../services/FirebaseConfig";
+import { useConvex } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { UserContext } from "../../context/UserContext";
 
 export default function SignIn() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const convex = useConvex();
+  const { user, setUser } = useContext(UserContext);
   const onSignIn = () => {
     if (!email || !password) {
-          Alert.alert("Missing Fields!", "Enter All field value");
-          return;
-        }
+      Alert.alert("Missing Fields!", "Enter All field value");
+      return;
+    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        const userData = await convex.query(api.Users.GetUser, {
+          email: email,
+        });
+
+        console.log(userData);
+        setUser(userData);
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        Alert.alert(
+          "Incorrect Email or Password",
+          "Please enter valid email and password"
+        );
+      });
   };
   return (
     <View
