@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import Colors from "@/shared/Colors";
 
-export default function Button({ title, onPress }) {
+export default function Button({ title, onPress, icon }) {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -21,6 +21,7 @@ export default function Button({ title, onPress }) {
         }}
       >
         {title}
+        {icon}
       </Text>
     </TouchableOpacity>
   );
