@@ -1,11 +1,33 @@
 import { Dimensions, Image, Text, View } from "react-native";
 import Colors from "../shared/Colors";
 import Button from "../components/shared/Button";
-import {ArrowRight} from 'lucide-react-native'; 
+import { ArrowRight } from "lucide-react-native";
 import { useRouter } from "expo-router";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./../services/FirebaseConfig";
+import { useContext, useEffect } from "react";
+import { UserContext } from "@/context/UserContext";
+import { useConvex } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function Index() {
-  const router=useRouter();
+  const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
+  const convex = useConvex();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (userInfo) => {
+      console.log(userInfo?.email);
+      const userData = await convex.query(api.Users.GetUser, {
+        email: userInfo?.email,
+      });
+      console.log(userData);
+      setUser(userData);
+      router.replace("/(tabs)/Home");
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <View
       style={{
@@ -67,12 +89,12 @@ export default function Index() {
           width: "100%",
           bottom: 25,
           padding: 20,
-          marginTop:15,
+          marginTop: 15,
         }}
       >
         <Button
           title={"Get Started"}
-          onPress={() => router.push('/auth/SignIn')}
+          onPress={() => router.push("/auth/SignIn")}
           icon={<ArrowRight />}
         />
       </View>
