@@ -9,6 +9,7 @@ import {
   SpoonAndKnifeIcon,
 } from "@hugeicons/core-free-icons";
 import Colors from "./../../shared/Colors";
+
 export default function TabLayout() {
   return (
     <Tabs

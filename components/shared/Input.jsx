@@ -5,13 +5,13 @@ export default function Input({
   placeholder,
   password = false,
   onChangeText,
-  label = {},
+  label = "",
 }) {
   return (
     <View
       style={{
         marginTop: 15,
-        width: '100%'
+        width: "100%",
       }}
     >
       <Text

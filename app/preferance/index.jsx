@@ -1,15 +1,54 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React, { useContext, useState } from "react";
 import Colors from "./../../shared/Colors";
 import Input from "./../../components/shared/Input";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import {
+  Dumbbell01Icon,
   FemaleSymbolFreeIcons,
   MaleSymbolFreeIcons,
+  PlusSignSquareIcon,
   WeightScaleIcon,
 } from "@hugeicons/core-free-icons";
+import Button from "./../../components/shared/Button";
+import { useMutation } from "convex/react";
+import { api } from "./../../convex/_generated/api";
+import { UserContext } from "../../context/UserContext";
+import { router } from "expo-router";
 
 export default function Preference() {
+  const [weight, setWeight] = useState();
+  const [height, setHeight] = useState();
+  const [gender, setGender] = useState();
+  const [goal, setGoal] = useState();
+  const { user, setUser } = useContext(UserContext);
+  const UpdateUserPref = useMutation(api.Users.UpdateUserPref);
+
+  const OnContinue = async () => {
+    if (!weight || !height || !gender) {
+      Alert.alert("Fill all details", "Enter all details to continue");
+      return;
+    }
+    const data = {
+      uid: user?._id,
+      weight: weight,
+      height: height,
+      gender: gender,
+      goal: goal,
+    };
+
+    const result = await UpdateUserPref({
+      ...data,
+    });
+
+    setUser((prev) => ({
+      ...prev,
+      ...data,
+    }));
+
+    router.replace("/(tabs)/Home");
+  };
+
   return (
     <View
       style={{
@@ -43,14 +82,22 @@ export default function Preference() {
             flex: 1,
           }}
         >
-          <Input placeholder={"e.g 70"} label="Weight (Kg)" />
+          <Input
+            placeholder={"e.g 70"}
+            label="Weight (Kg)"
+            onChangeText={setWeight}
+          />
         </View>
         <View
           style={{
             flex: 1,
           }}
         >
-          <Input placeholder={"e.g 5.10"} label="Height (ft.)" />
+          <Input
+            placeholder={"e.g 5.10"}
+            label="Height (ft.)"
+            onChangeText={setHeight}
+          />
         </View>
       </View>
       <View
@@ -73,11 +120,12 @@ export default function Preference() {
             gap: 10,
           }}
         >
-          <View
+          <TouchableOpacity
+            onPress={() => setGender("Male")}
             style={{
               borderWidth: 1,
               padding: 7,
-              color: Colors.GRAY,
+              borderColor: gender == "Male" ? Colors.PRIMARY : Colors.GRAY,
               borderRadius: 10,
               flex: 1,
               alignItems: "center",
@@ -88,12 +136,13 @@ export default function Preference() {
               size={40}
               color={Colors.BLUE}
             />
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setGender("Female")}
             style={{
               borderWidth: 1,
               padding: 7,
-              color: Colors.GRAY,
+              borderColor: gender == "Female" ? Colors.PRIMARY : Colors.GRAY,
               borderRadius: 10,
               flex: 1,
               alignItems: "center",
@@ -104,38 +153,83 @@ export default function Preference() {
               size={40}
               color={Colors.PINK}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <Text>What's Your Goal?</Text>
-        <View>
+      <View style={{ marginTop: 15 }}>
+        <Text
+          style={{
+            fontWeight: "medium",
+            fontSize: 18,
+          }}
+        >
+          What's Your Goal?
+        </Text>
+        <TouchableOpacity
+          onPress={() => setGoal("Weight Loss")}
+          style={[
+            styles.goalContainer,
+            {
+              borderColor: goal == "Weight Loss" ? Colors.PRIMARY : Colors.GRAY,
+            },
+          ]}
+        >
           <HugeiconsIcon icon={WeightScaleIcon} />
           <View>
             <Text style={styles.goalText}>Weight Loss</Text>
             <Text>Reduce body fat & get leaner</Text>
           </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setGoal("Muscle Gain")}
+          style={[
+            styles.goalContainer,
+            {
+              borderColor: goal == "Muscle Gain" ? Colors.PRIMARY : Colors.GRAY,
+            },
+          ]}
+        >
+          <HugeiconsIcon icon={Dumbbell01Icon} />
           <View>
-            <HugeiconsIcon icon={WeightScaleIcon} />
-            <View>
-              <Text style={styles.goalText}>Weight Loss</Text>
-              <Text>Reduce body fat & get leaner</Text>
-            </View>
-            <View>
-              <HugeiconsIcon icon={WeightScaleIcon} />
-              <View>
-                <Text style={styles.goalText}>Weight Loss</Text>
-                <Text>Reduce body fat & get leaner</Text>
-              </View>
-            </View>
+            <Text style={styles.goalText}>Muscle Gain</Text>
+            <Text>Build Muscle & get Strongerr</Text>
           </View>
-        </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setGoal("Weight Gain")}
+          style={[
+            styles.goalContainer,
+            {
+              borderColor: goal == "Weight Gain" ? Colors.PRIMARY : Colors.GRAY,
+            },
+          ]}
+        >
+          <HugeiconsIcon icon={PlusSignSquareIcon} />
+          <View>
+            <Text style={styles.goalText}>Weight Gain</Text>
+            <Text>Increase Healthy Body Mass</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={{ marginTop: 25 }}>
+        <Button title={"Continue"} onPress={OnContinue} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  goalContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: Colors.GRAY,
+    borderRadius: 15,
+    marginTop: 10,
+  },
   goalText: {
     fontSize: 20,
     fontWeight: "bold",

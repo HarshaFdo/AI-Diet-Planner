@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Alert } from "react-native";
+import { View, Text, Image, Alert } from "react-native";
 import React, { useContext, useState } from "react";
 import Input from "../../components/shared/Input";
 import Button from "../../components/shared/Button";
@@ -9,12 +9,13 @@ import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserContext } from "../../context/UserContext";
 
-export default function SignUp() {
+export default function SingUp() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const createNewUser = useMutation(api.Users.CreateNewUser);
   const { user, setUser } = useContext(UserContext);
+
   const onSignUp = () => {
     if (!name || !email || !password) {
       Alert.alert("Missing Fields!", "Enter All field value");

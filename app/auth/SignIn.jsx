@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Alert } from "react-native";
+import { View, Text, Image, Alert } from "react-native";
 import React, { useContext, useState } from "react";
 import Input from "../../components/shared/Input";
 import Button from "../../components/shared/Button";
@@ -9,7 +9,7 @@ import { useConvex } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { UserContext } from "../../context/UserContext";
 
-export default function SignIn() {
+export default function SingIn() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const convex = useConvex();
@@ -19,7 +19,6 @@ export default function SignIn() {
       Alert.alert("Missing Fields!", "Enter All field value");
       return;
     }
-
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in

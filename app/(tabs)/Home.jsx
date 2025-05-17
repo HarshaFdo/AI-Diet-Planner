@@ -11,6 +11,7 @@ export default function Home() {
       router.replace("/preferance");
     }
   }, [user]);
+
   return (
     <View>
       <Text>Home</Text>
