@@ -1,9 +1,11 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import moment from "moment";
-import Colors from "../../shared/Colors";
+import Colors from "../shared/Colors";
+import { UserContext } from "../context/UserContext";
 
 export default function TodayProgress() {
+  const { user } = useContext(UserContext);
   return (
     <View
       style={{
@@ -46,7 +48,7 @@ export default function TodayProgress() {
           color: Colors.PRIMARY,
         }}
       >
-        1500/2000 kcal
+        1500/{user?.calories} kcal
       </Text>
       <Text style={{ textAlign: "center", marginTop: 2, fontSize: 16 }}>
         You're doing great!
@@ -74,7 +76,7 @@ export default function TodayProgress() {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          marginTop: 5
+          marginTop: 5,
         }}
       >
         <Text>Calories Consumes</Text>

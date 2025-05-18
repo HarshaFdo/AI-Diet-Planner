@@ -1,6 +1,6 @@
 import { View, Text, Image } from "react-native";
 import React, { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../context/UserContext";
 
 export default function HomeHeader() {
   const { user } = useContext(UserContext);
@@ -15,7 +15,7 @@ export default function HomeHeader() {
       }}
     >
       <Image
-        source={require("./../../assets/images/user.png")}
+        source={require("./../assets/images/user.png")}
         style={{
           width: 60,
           height: 60,

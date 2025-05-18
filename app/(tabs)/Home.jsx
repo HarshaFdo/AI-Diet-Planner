@@ -2,8 +2,10 @@ import { View, Text } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "./../../context/UserContext";
 import { router } from "expo-router";
-import HomeHeader from "../../components/shared/HomeHeader";
-import TodayProgress from "../../components/shared/TodayProgress";
+import HomeHeader from "../../components/HomeHeader";
+import TodayProgress from "../../components/TodayProgress";
+import GenerateRecipeCard from "../../components/GenerateRecipeCard";
+import TodaysMealPlan from "../../components/TodaysMealPlan";
 
 export default function Home() {
   const { user } = useContext(UserContext);
@@ -22,6 +24,8 @@ export default function Home() {
     >
       <HomeHeader />
       <TodayProgress />
+      <GenerateRecipeCard />
+      <TodaysMealPlan />
     </View>
   );
 }
