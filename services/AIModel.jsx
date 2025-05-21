@@ -1,3 +1,4 @@
+import axios from "axios";
 // import OpenAI from "openai";
 
 // const openai = new OpenAI({
@@ -51,7 +52,7 @@ export const CalculateCaloriesAI = async (PROMPT) => {
 //     response_format: "json_object",
 //   });
 
-export const GenerateRecipeOptionsAiModel = async (PROMPT) => {
+export const GenerateAIRecipe = async (PROMPT) => {
   const response = await fetch(
     "https://openrouter.ai/api/v1/chat/completions",
     {
@@ -83,3 +84,22 @@ export const GenerateRecipeOptionsAiModel = async (PROMPT) => {
 
   return data;
 };
+
+const BASE_URL = "https://aigurulab.tech";
+export const GenerateRecipeImage = async (prompt) =>
+  await axios.post(
+    BASE_URL + "/api/generate-image",
+    {
+      width: 1024,
+      height: 1024,
+      input: prompt,
+      model: "sdxl", //'flux'
+      aspectRatio: "1:1", //Applicable to Flux model only
+    },
+    {
+      headers: {
+        "x-api-key": process.env.EXPO_PUBLIC_AIGURU_LAB_API_KEY,
+        "Content-Type": "application/json", // Content Type
+      },
+    }
+  );

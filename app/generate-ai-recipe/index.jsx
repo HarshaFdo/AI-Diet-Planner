@@ -2,50 +2,34 @@ import { View, Text, Platform, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import Colors from "../../shared/Colors";
 import Button from "../../components/shared/Button";
-import { GenerateRecipeOptionsAiModel } from "../../services/AIModel";
+import { GenerateAIRecipe } from "../../services/AIModel";
 import Prompt from "../../shared/Prompt";
+import RecipeOptionList from "../../components/RecipeOptionList";
 
 export default function GenerateAiRecipe() {
   const [input, setInput] = useState();
   const [loading, setLoading] = useState(false);
+  const [recipeOption, setRecipeOption] = useState();
 
   const GenerateRecipeOptions = async () => {
     setLoading(true);
     // Make AI model call to generate recipe Options
     try {
       const PROMPT = input + Prompt.GENERATE_RECIPE_OPTION_PROMPT;
-      const result = await GenerateRecipeOptionsAiModel(PROMPT);
-      // Log full result for debugging
-      // console.log("FULL AI RESPONSE:", JSON.stringify(result, null, 2));
-
-      // Defensive check before accessing deeply nested fields
-      const content = result?.choices?.[0]?.message?.content;
-
-      if (!content) {
-        console.error(" No content returned from AI");
-        return;
-      }
-
-      // Remove markdown code block formatting
-      const cleanedContent = content.replace(/```json|```/g, "").trim();
-
-      // Parse the JSON string
-      const recipes = JSON.parse(cleanedContent);
-
-      //console.log("AI Response Content:", content);
-      console.log("Parsed Recipes:", recipes);
-      // TODO: update state to show recipes in UI
-    } catch (e) {
-      console.log(" Error:", e.message || e);
-    } finally {
+      const result = await GenerateAIRecipe(PROMPT);
+      console.log(result.choices[0].message);
+      const extractJson = result.choices[0].message.content
+        .replace("```json", "")
+        .replace("```", "");
+      const parsedJSONResp = JSON.parse(extractJson);
+      console.log(parsedJSONResp);
+      setRecipeOption(parsedJSONResp);
       setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      alert(e.message || "Something went wrong");
+      console.log(e);
     }
-    //   console.log(result.choices[0].message);
-    //   setLoading(false);
-    // } catch (e) {
-    //   setLoading(false);
-    //   alert(e.message || "Something went wrong");
-    //   console.log(e)
   };
 
   return (
@@ -87,6 +71,10 @@ export default function GenerateAiRecipe() {
           loading={loading}
         />
       </View>
+
+      {recipeOption?.length > 0 && (
+        <RecipeOptionList recipeOption={recipeOption} />
+      )}
     </View>
   );
 }

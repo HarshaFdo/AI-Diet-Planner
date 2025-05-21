@@ -15,6 +15,22 @@ export default {
       - realistic image Text prompt as per recipe as imagePrompt
       - Give me category List for recipe from [Breakfast,Lunch,Dinner,Salad,Drink,Cake] as cateogy
       - Give me response in JSON format only
-      -Schema format should be:
-      {}`,
+      - Schema format should be:
+      {
+       "description": "string",
+       "recipeName": "string",
+       calories: "number",
+       "category": ["string"],
+       "cookTime": "number",
+       "imagePrompt": "string",
+       "ingredients": [
+         {
+           "icon": "string",
+           "ingredient": "string",
+           "quantity": "string",
+         }
+       ],
+       "serveTo": "number",
+       "steps": ["string"],
+      }`,
 };
