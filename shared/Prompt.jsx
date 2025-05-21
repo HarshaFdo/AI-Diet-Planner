@@ -9,7 +9,7 @@ export default {
   2 line description and main ingredient list in JSON format with field recipeName,description,ingredients (without size) only, Do not give me text response`,
 
   GENERATE_COMPLETE_RECIPE_PROMPT: `
-      - As per recipeName and description give me recipeName and description aa field, Give me all list of ingredients as ingredient,
+      - As per recipeName and description give me recipeName and description as field, Give me all list of ingredients as ingredient,
       - emoji icons for each ingredient as icon, quantity as quantity, along with detail step by step recipe as steps
       - Total calories as calories (only number), Minutes to cook as cookTime and serving number as serveTo
       - realistic image Text prompt as per recipe as imagePrompt
