@@ -1,12 +1,33 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
+import { View, Text, FlatList } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { CalendarAdd01FreeIcons } from "@hugeicons/core-free-icons";
 import Colors from "../shared/Colors";
 import Button from "./shared/Button";
+import { useConvex } from "convex/react";
+import { api } from "../convex/_generated/api";
+import moment from "moment";
+import { UserContext } from "../context/UserContext";
+import MealPlanCard from "./MealPlanCard";
 
 export default function TodaysMealPlan() {
   const [mealPlan, setMealPlan] = useState();
+  const { user } = useContext(UserContext);
+  const convex = useConvex();
+
+  useEffect(() => {
+    user && GetTodaysMealPlan();
+  }, [user]);
+
+  const GetTodaysMealPlan = async () => {
+    const result = await convex.query(api.MealPlan.GetTodaysMealPlan, {
+      date: moment().format("DD/MM/YYYY"),
+      uid: user?._id,
+    });
+    console.log("-->", result);
+    setMealPlan(result);
+  };
+
   return (
     <View style={{ marginTop: 15 }}>
       <Text
@@ -18,7 +39,7 @@ export default function TodaysMealPlan() {
         Today's Meal Plan
       </Text>
 
-      {!mealPlan && (
+      {!mealPlan ? (
         <View
           style={{
             display: "flex",
@@ -45,6 +66,13 @@ export default function TodaysMealPlan() {
           </Text>
 
           <Button title={"Create New Meal Plan"} />
+        </View>
+      ) : (
+        <View>
+          <FlatList data={mealPlan}
+          renderItem={({item})=>(
+            <MealPlanCard mealPlanInfo={item}/>
+          )}/>
         </View>
       )}
     </View>
