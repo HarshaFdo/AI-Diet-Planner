@@ -1,7 +1,7 @@
 import { View, Text, Platform, FlatList } from "react-native";
 import React, { useRef } from "react";
 import RecipeIntro from "../../components/RecipeIntro";
-import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import Colors from "../../shared/Colors";
@@ -18,7 +18,7 @@ export default function RecipeDetail() {
   const actionSheetRef = useRef(null);
 
   const recipeDetail = useQuery(api.Recipes.GetRecipeById, {
-    id: recipeId || "jn76d56c5gmyw7eptn7c661gzd7gaq0e",
+    id: recipeId == undefined && "jn7ctgpt32e6yy6zs0qjb8fhj57gdpnx",
   });
   console.log("recipeDetail-", recipeDetail);
 

@@ -30,6 +30,8 @@ export default {
            "quantity": "string",
          }
        ],
+       calories: <Single Person Serve>,
+       proteins: <Single Person Serve>,
        "serveTo": "number",
        "steps": ["string"],
       }`,

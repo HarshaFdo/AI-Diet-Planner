@@ -6,24 +6,27 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Colors from "../shared/Colors";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { CheckmarkSquare02Icon, SquareIcon } from "@hugeicons/core-free-icons";
 import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { RefreshDataContext } from "../context/RefreshDataContext";
 
-export default function MealPlanCard({ mealPlanInfo,refreshData }) {
+export default function MealPlanCard({ mealPlanInfo }) {
   const updateStatus = useMutation(api.MealPlan.updateStatus);
+  const {refreshData, setRefreshData} = useContext(RefreshDataContext);
 
   const onCheck = async (status) => {
     const result = await updateStatus({
       id: mealPlanInfo?.mealPlan?._id,
       status: status,
+      calories: mealPlanInfo?.recipe?.jsonData?.calories,
     });
 
     Alert.alert("Great!", "Status Updated!");
-    refreshData();
+    setRefreshData(DataTransfer.now());
   };
 
   return (
@@ -70,11 +73,14 @@ export default function MealPlanCard({ mealPlanInfo,refreshData }) {
         <View>
           {mealPlanInfo?.mealPlan?.status != true ? (
             <TouchableOpacity onPress={() => onCheck(true)}>
-              <HugeiconsIcon icon={SquareIcon} color={Colors.GRAY}/>
+              <HugeiconsIcon icon={SquareIcon} color={Colors.GRAY} />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={() => onCheck(false)}>
-              <HugeiconsIcon icon={CheckmarkSquare02Icon} color={Colors.GREEN}/>
+              <HugeiconsIcon
+                icon={CheckmarkSquare02Icon}
+                color={Colors.GREEN}
+              />
             </TouchableOpacity>
           )}
         </View>

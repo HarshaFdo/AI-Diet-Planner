@@ -9,15 +9,17 @@ import { api } from "../convex/_generated/api";
 import moment from "moment";
 import { UserContext } from "../context/UserContext";
 import MealPlanCard from "./MealPlanCard";
+import { RefreshDataContext } from "../context/RefreshDataContext";
 
 export default function TodaysMealPlan() {
   const [mealPlan, setMealPlan] = useState([]);
   const { user } = useContext(UserContext);
   const convex = useConvex();
+  const {refreshData, setRefreshData} = useContext(RefreshDataContext);
 
   useEffect(() => {
     user && GetTodaysMealPlan();
-  }, [user]);
+  }, [user, refreshData]);
 
   const GetTodaysMealPlan = async () => {
     const result = await convex.query(api.MealPlan.GetTodaysMealPlan, {
@@ -39,7 +41,7 @@ export default function TodaysMealPlan() {
         Today's Meal Plan
       </Text>
 
-      {!mealPlan? (
+      {!mealPlan ? (
         <View
           style={{
             display: "flex",
@@ -71,12 +73,7 @@ export default function TodaysMealPlan() {
         <View>
           <FlatList
             data={mealPlan}
-            renderItem={({ item }) => (
-              <MealPlanCard
-                mealPlanInfo={item}
-                refreshData={GetTodaysMealPlan}
-              />
-            )}
+            renderItem={({ item }) => <MealPlanCard mealPlanInfo={item} />}
           />
         </View>
       )}

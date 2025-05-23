@@ -85,6 +85,7 @@ export const GenerateAIRecipe = async (PROMPT) => {
   return data;
 };
 
+
 const BASE_URL = "https://aigurulab.tech";
 export const GenerateRecipeImage = async (prompt) =>
   await axios.post(

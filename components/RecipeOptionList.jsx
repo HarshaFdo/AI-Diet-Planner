@@ -23,6 +23,7 @@ export default function RecipeOptionList({ recipeOption }) {
       " Desceiption: " +
       recipe?.description +
       Prompt.GENERATE_COMPLETE_RECIPE_PROMPT;
+    
 
     try {
       const result = await GenerateAIRecipe(PROMPT);
@@ -36,6 +37,7 @@ export default function RecipeOptionList({ recipeOption }) {
         parsedJSONResp?.imagePrompt
       );
       console.log(aiImageResp?.data?.image);
+      
       // Save to Data Base
       const saveRecipeResult = await CreateRecipe({
         jsonData: parsedJSONResp,
