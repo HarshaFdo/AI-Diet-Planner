@@ -18,7 +18,7 @@ export default function RecipeDetail() {
   const actionSheetRef = useRef(null);
 
   const recipeDetail = useQuery(api.Recipes.GetRecipeById, {
-    id: recipeId == undefined && "jn76d56c5gmyw7eptn7c661gzd7gaq0e",
+    id: recipeId || "jn76d56c5gmyw7eptn7c661gzd7gaq0e",
   });
   console.log("recipeDetail-", recipeDetail);
 

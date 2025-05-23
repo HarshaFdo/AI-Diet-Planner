@@ -11,7 +11,7 @@ import { UserContext } from "../context/UserContext";
 import MealPlanCard from "./MealPlanCard";
 
 export default function TodaysMealPlan() {
-  const [mealPlan, setMealPlan] = useState();
+  const [mealPlan, setMealPlan] = useState([]);
   const { user } = useContext(UserContext);
   const convex = useConvex();
 
@@ -39,7 +39,7 @@ export default function TodaysMealPlan() {
         Today's Meal Plan
       </Text>
 
-      {!mealPlan ? (
+      {!mealPlan? (
         <View
           style={{
             display: "flex",
@@ -69,10 +69,15 @@ export default function TodaysMealPlan() {
         </View>
       ) : (
         <View>
-          <FlatList data={mealPlan}
-          renderItem={({item})=>(
-            <MealPlanCard mealPlanInfo={item}/>
-          )}/>
+          <FlatList
+            data={mealPlan}
+            renderItem={({ item }) => (
+              <MealPlanCard
+                mealPlanInfo={item}
+                refreshData={GetTodaysMealPlan}
+              />
+            )}
+          />
         </View>
       )}
     </View>

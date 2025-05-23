@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "./../../context/UserContext";
 import { router } from "expo-router";
@@ -17,15 +17,21 @@ export default function Home() {
   }, [user]);
 
   return (
-    <View
-      style={{
-        padding: 20,
-      }}
-    >
-      <HomeHeader />
-      <TodayProgress />
-      <GenerateRecipeCard />
-      <TodaysMealPlan />
-    </View>
+    <FlatList
+      data={[]}
+      renderItem={() => null}
+      ListHeaderComponent={
+        <View
+          style={{
+            padding: 20,
+          }}
+        >
+          <HomeHeader />
+          <TodayProgress />
+          <GenerateRecipeCard />
+          <TodaysMealPlan />
+        </View>
+      }
+    ></FlatList>
   );
 }

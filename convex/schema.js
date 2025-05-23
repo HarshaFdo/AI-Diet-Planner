@@ -27,5 +27,6 @@ export default defineSchema({
     date: v.string(),
     mealType: v.string(),
     uid: v.id("Users"),
+    status: v.optional(v.boolean())
   }),
 });

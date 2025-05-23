@@ -28,11 +28,8 @@ export const GetTodaysMealPlan = query({
     // Fetch All Meal Plans
     const mealPlans = await ctx.db
       .query("mealPlan")
-      .filter(q =>
-        q.and(
-          q.eq(q.field("uid"), args.uid), 
-          q.eq(q.field("date"), args.date)
-        )
+      .filter((q) =>
+        q.and(q.eq(q.field("uid"), args.uid), q.eq(q.field("date"), args.date))
       )
       .collect();
     // Fetch Recipes belong to Meal Plan
@@ -46,5 +43,17 @@ export const GetTodaysMealPlan = query({
       })
     );
     return results;
+  },
+});
+
+export const updateStatus = mutation({
+  args: {
+    id: v.id("mealPlan"),
+    status: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const result = await ctx.db.patch(args.id, {
+      status: args.status,
+    });
   },
 });
