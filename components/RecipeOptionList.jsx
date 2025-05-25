@@ -50,7 +50,7 @@ export default function RecipeOptionList({ recipeOption }) {
       setLoading(false);
       router.push({
         pathname: "/recipe-detail",
-        recipeId: saveRecipeResult,
+        params: { recipeId: saveRecipeResult },
       });
     } catch (e) {
       setLoading(false);
